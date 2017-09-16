@@ -33,3 +33,7 @@
 
 # Del CLion
 */.idea
+
+# El ejecutable
+*/main
+

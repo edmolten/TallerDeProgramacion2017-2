@@ -80,7 +80,7 @@ int main() {
         t--;
         fill_graph(&residual_graph, edges_number);
         cout << "Network " << ++network_number << endl;
-        cout << ford_fulkerson(residual_graph, s, t) << endl;
+        cout << "The bandwidth is " << ford_fulkerson(residual_graph, s, t) << "." << endl << endl;
     }
     return 0;
 }
