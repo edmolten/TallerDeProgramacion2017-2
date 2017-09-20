@@ -36,7 +36,7 @@ bool bfs(graph res, int s, int t, int parent[], int cost[]){
         //for (int v=0; v<n; v++){
 			int v = it->first;
 			int cost_v = it->second;
-            if (not visited[v]){
+            if (not visited[v] && cost_v > 0){
                 q.push(v);
                 parent[v] = u;
                 cost[v] = min(cost[u], cost_v);
@@ -58,29 +58,30 @@ int ford_fulkerson(graph residual_graph, int s, int t) {
     cost[s] = MAX_COST;
     int max_flow = 0;
     while (bfs(residual_graph, s, t, parent, cost)){
-		cout << cost[1] << cost[2] << cost[3] << cost[4] << cost[5] << endl;
-		cout << parent[1] << parent[2] << parent[3] << parent[4] << parent[5] << endl;
+		//cout << cost[1] << cost[2] << cost[3] << cost[4] << cost[5] << endl;
+		//cout << parent[1] << parent[2] << parent[3] << parent[4] << parent[5] << endl;
         for (v=t; v != s; v=parent[v]){
             u = parent[v];
             //cout << "hola " << u << v << endl;
             for(vector<pair<int,int>>::iterator it = residual_graph[v].begin(); it != residual_graph[v].end(); it++){
 				if(it->first == u){	
 					
-					residual_graph[v][distance(residual_graph[v].begin(),it)].second -= cost[t];
+					residual_graph[v][distance(residual_graph[v].begin(),it)].second += cost[t];
 					
 					for(vector<pair<int,int>>::iterator it = residual_graph[u].begin(); it != residual_graph[u].end(); it++){
 						if(it->first == v){
 							//cout << "It esta en la posicion " << distance(residual_graph[u].begin(),it) << endl;
 							//getchar();
-							residual_graph[u][distance(residual_graph[u].begin(),it)].second += cost[t];
+							residual_graph[u][distance(residual_graph[u].begin(),it)].second -= cost[t];
 						}
 					}
 				}
 			}
         }
+        //print_graph(residual_graph);
         max_flow += cost[t];
-        cout << max_flow << endl;
-        getchar();
+        //cout << max_flow << endl;
+        //getchar();
     }
     return max_flow;
 }
@@ -112,10 +113,10 @@ int main(){
 			}
 		}
 
-		print_graph(g);
+		//print_graph(g);
 	
-		cout << "The cost is " << ford_fulkerson(g, 0, M-1) << "." << endl << endl;
-	
+		cout << "The minimum cost to interrupt communication is " << ford_fulkerson(g, 0, M-1) << "." << endl << endl;
+		cin >> M >> W;
 	}
 	
 	return 0;
