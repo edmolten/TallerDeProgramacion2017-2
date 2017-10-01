@@ -1,0 +1,3 @@
+/cygdrive/c/Users/eddox/Documents/GitHub/TallerDeProgramacion2017-2/semana2/p820_bandwidth/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/cygdrive/c/Users/eddox/Documents/GitHub/TallerDeProgramacion2017-2/semana2/p820_bandwidth/cmake-build-debug/CMakeFiles/edit_cache.dir
+/cygdrive/c/Users/eddox/Documents/GitHub/TallerDeProgramacion2017-2/semana2/p820_bandwidth/cmake-build-debug/CMakeFiles/taller_clase2.dir

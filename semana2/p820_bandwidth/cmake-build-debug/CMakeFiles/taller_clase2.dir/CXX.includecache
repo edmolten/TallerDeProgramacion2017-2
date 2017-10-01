@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/c/Users/eddox/Documents/GitHub/TallerDeProgramacion2017-2/semana2/p820_bandwidth/main.cpp
+iostream
+-
+vector
+-
+queue
+-
+climits
+-
+
