@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/taller_clase2.dir/main.cpp.o  -o taller_clase2.exe -Wl,--out-implib,libtaller_clase2.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
