@@ -16,11 +16,19 @@ struct info{
 typedef struct info info;
 typedef vector<info> infos;
 
-void init_graph(graph *g){
+void init_graph(graph *g, int m , int f){
     unsigned long n = g->size();
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n;j++)
-            (*g)[i][j] = 1;
+            if ( ( i< m and m <= j and j< m + f )
+                    or (i == n-2 and j < m)
+                    or (j == n-1 and m <= i and  i < m + f)){
+                (*g)[i][j] = 1;
+            }
+            else{
+                (*g)[i][j] = 0;
+            };
+
     }
 }
 
@@ -79,66 +87,18 @@ void print_graph(graph g){
     }
 }
 
-void fill_graph(graph * g, int edges_number){
-    int node1, node2, bandwidth, j;
-    for(j=0; j<edges_number; j++){
-        cin >> node1 >> node2 >> bandwidth;
-        node1--;
-        node2--;
-        (*g)[node1][node2] += bandwidth;
-        (*g)[node2][node1] += bandwidth;
-    }
-}
-
-void check_restrictions_males(graph * g, int males, int females, info male_info, infos females_infos){
-    for(int i = 0; i < females; i++){
-        if(male_info.music != females_infos[i].music
-           or abs(male_info.height - females_infos[i].height) > 40
-           or male_info.sport == females_infos[i].sport){
-            (*g)[males-1][i] = 0;
-        }
-    }
-}
-
-void check_restrictions_females(graph * g, int males, int females, info female_info, infos males_infos){
-    for(int i = 0; i < males; i++){
-        if(female_info.music != males_infos[i].music
-           or abs(female_info.height - males_infos[i].height) > 40
-           or female_info.sport == males_infos[i].sport){
-            (*g)[i][females-1] = 0;
-        }
-    }
-}
-
-void delete_useless(graph * g, int males, int females){
-    unsigned long n = g->size();
-    for(int i = males; i< n ;i++){
-        for(int j = 0; j <n ; j++){
-            (*g)[i][j] = 0;
-        }
-    }
-    for(int i = 0; i< n ;i++){
-        for(int j = females; j <n ; j++){
-            (*g)[i][j] = 0;
-        }
-    }
-    
-    for(int k = 0; k < females ; k++){
-        (*g)[n-1][k] = 1;
-    }
-    for(int l = 0; l < males ; l++){
-        (*g)[l][n-2] = 1;
-    }
+bool match_couple(info male_info, info female_info){
+    return (male_info.music == female_info.music
+       and abs(male_info.height - female_info.height) <= 40
+       and (male_info.sport != female_info.sport));
 }
 
 pair<int, char> check_node_max(graph * g, int males, int females){
-	
 	int max_cardinalidad = 0;
 	int aux;
     pair<int,char> nodo_max_cardinalidad;
-
     for(int i = 0; i < males; i++){
-		for(int j = 0; j < females; j++){	
+		for(int j = 0; j < females; j++){
 			aux += (*g)[i][j];
 		}
 		if (aux > max_cardinalidad){
@@ -148,42 +108,32 @@ pair<int, char> check_node_max(graph * g, int males, int females){
 		};
 		aux = 0;
 	}
-		
 	for(int i = 0; i < females; i++){
-		for(int j = 0; j < males; j++){	
+		for(int j = 0; j < males; j++){
 			aux += (*g)[j][i];
 		}
-		if (aux > max_cardinalidad){ 
+		if (aux > max_cardinalidad){
 			max_cardinalidad = aux;
 			nodo_max_cardinalidad.first = i;
 			nodo_max_cardinalidad.second = 'F';
 		}
 	}
-	
 	return nodo_max_cardinalidad;
-
 }
-
 
 int main(int argc, const char * argv[]) {
     int testCases, pupils, height;
     char gender;
     string music, sport;
-    
     cin >> testCases;
     for(int i = 0 ; i < testCases; i++){
-        
         cin >> pupils;
-        
         int males = 0;
         int females = 0;
         int eliminados = 0;
-        
         infos males_infos(pupils);
         infos females_infos(pupils);
-        
         graph graph(pupils+2, vector<int>(pupils+2));
-        init_graph(&graph);
         for(int j = 0; j < pupils; j++){
             cin >> height >> gender >> music >> sport;
             if(gender == 'M'){
@@ -191,22 +141,29 @@ int main(int argc, const char * argv[]) {
                 males_infos[males-1].height = height;
                 males_infos[males-1].music = music;
                 males_infos[males-1].sport = sport;
-                check_restrictions_males(&graph, males, females, males_infos[males-1], females_infos);
             }
             else{
                 females++;
                 females_infos[females-1].height = height;
                 females_infos[females-1].music = music;
                 females_infos[females-1].sport = sport;
-                check_restrictions_females(&graph, males, females, females_infos[females-1], males_infos);
             }
-        
         }
-
-        delete_useless(&graph, males, females);
-        //cout << "costo" << endl << ford_fulkerson(&graph, graph.size()-1, graph.size()-2) << endl;		
-		
-		if(ford_fulkerson(graph, graph.size()-1, graph.size()-2) != 0){
+        // now fill graph...
+        init_graph(&graph, males, females);
+        // ...  and erase conections
+        for(int male = 0; male < males ; male ++){
+            for(int female = males; female < males + females; female ++){
+                info male_info = males_infos[male];
+                info female_info = females_infos[female - males];
+                bool match = match_couple(male_info, female_info);
+                if (not match){
+                    graph[male][female] = 0;
+                }
+            }
+        }
+        // TODO hasta aca llegue
+		while(ford_fulkerson(graph, graph.size()-1, graph.size()-2) != 0){
 			pair <int, char> selected_node = check_node_max(&graph, males, females);
         
 			if(selected_node.second == 'M'){
@@ -221,9 +178,7 @@ int main(int argc, const char * argv[]) {
 			}
 			eliminados++;
 		}
-		
         cout << eliminados << endl;
-        
     }
     return 0;
 }
