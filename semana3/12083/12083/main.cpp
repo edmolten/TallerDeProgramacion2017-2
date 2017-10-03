@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-
+#include <set>
 #define INT_MAX 500;
 
 using namespace std;
@@ -56,7 +56,7 @@ bool bfs(graph res, int s, int t, int parent[], int cost[]){
     return visited[t];
 }
 
-int ford_fulkerson(graph residual_graph, int s, int t) {
+int ford_fulkerson(graph residual_graph, int s, int t, set<int> *matched_nodes) {
     int u, v;
     unsigned long n = residual_graph.size();
     int parent[n];
@@ -69,6 +69,8 @@ int ford_fulkerson(graph residual_graph, int s, int t) {
             u = parent[v];
             residual_graph[u][v] -= cost[t];
             residual_graph[v][u] += cost[t];
+            matched_nodes->insert(u);
+            matched_nodes->insert(v);
         }
         max_flow += cost[t];
     }
@@ -104,7 +106,6 @@ int check_node_max(graph * g, int m, int f){
 		if (aux > max_cardinalidad){
 			max_cardinalidad = aux;
 			nodo_max_cardinalidad = i;
-			//nodo_max_cardinalidad.second = 'M';
 		};
 		aux = 0;
 	}
@@ -115,10 +116,35 @@ int check_node_max(graph * g, int m, int f){
 		if (aux > max_cardinalidad){
 			max_cardinalidad = aux;
 			nodo_max_cardinalidad = i;
-			//nodo_max_cardinalidad.second = 'F';
 		}
 	}
 	return nodo_max_cardinalidad;
+}
+
+
+int check_node_max2(graph g, int m, int f, set<int> matched_nodes){
+    int max_cardinalidad = 0;
+    int aux = 0;
+    int nodo_max_cardinalidad;
+    for(auto it = matched_nodes.begin(); it != matched_nodes.end(); it ++){
+        int node = *it;
+        if(node < m){
+            for(int j = m; j < m + f; j++){
+                aux += g[node][j];
+            }
+        }
+        else if (node < g.size() - 2){
+            for(int i = 0; i < m; i++){
+                aux += g[i][node];
+            }
+        }
+        if (aux > max_cardinalidad){
+            max_cardinalidad = aux;
+            nodo_max_cardinalidad = node;
+        };
+        aux = 0;
+    }
+    return nodo_max_cardinalidad;
 }
 
 int main(int argc, const char * argv[]) {
@@ -162,17 +188,21 @@ int main(int argc, const char * argv[]) {
                 }
             }
         }
-        // TODO hasta aca llegue
-		while(ford_fulkerson(graph, graph.size()-2, graph.size()-1) != 0){
-			int selected_node = check_node_max(&graph, males, females);
+        set<int> matched_nodes;
+        int source = graph.size()-2;
+        int sink = graph.size()-1;
+		while(ford_fulkerson(graph, source, sink,&matched_nodes) != 0){
+            matched_nodes.erase(source);
+            matched_nodes.erase(sink);
+			int selected_node = check_node_max2(graph, males, females, matched_nodes);
 			if(selected_node < males){
-				for(int ii = 0; ii < females; ii++){
-					graph[selected_node][males + ii] = 0;
+				for(int jj = males; jj < males + females; jj++){
+					graph[selected_node][jj] = 0;
 				}
 			}
 			else{
-				for(int jj = 0; jj < males; jj++){
-					graph[jj][selected_node] = 0;
+				for(int ii = 0; ii < males; ii++){
+					graph[ii][selected_node] = 0;
 				}
 			}
 			eliminados++;
