@@ -162,26 +162,20 @@ int main(int argc, const char * argv[]) {
                 }
             }
         }
-        
-        print_graph(graph);
         // TODO hasta aca llegue
 		while(ford_fulkerson(graph, graph.size()-2, graph.size()-1) != 0){
-			
 			int selected_node = check_node_max(&graph, males, females);
-        
 			if(selected_node < males){
-				for(int i = 0; i < females; i++){
-					graph[selected_node][males + i] = 0;
+				for(int ii = 0; ii < females; ii++){
+					graph[selected_node][males + ii] = 0;
 				}
 			}
 			else{
-				for(int i = 0; i < males; i++){
-					graph[i][selected_node] = 0;
+				for(int jj = 0; jj < males; jj++){
+					graph[jj][selected_node] = 0;
 				}
 			}
-			
 			eliminados++;
-			//cout << eliminados << endl;
 		}
         cout << pupils - eliminados << endl;
     }
