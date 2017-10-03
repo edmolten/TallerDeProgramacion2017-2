@@ -206,24 +206,28 @@ int main(int argc, const char * argv[]) {
         delete_useless(&graph, males, females);
         //cout << "costo" << endl << ford_fulkerson(&graph, graph.size()-1, graph.size()-2) << endl;		
 		
-		if(ford_fulkerson(graph, graph.size()-1, graph.size()-2) != 0){
+		while(ford_fulkerson(graph, graph.size()-1, graph.size()-2) != 0){
+			print_graph(graph);
 			pair <int, char> selected_node = check_node_max(&graph, males, females);
         
 			if(selected_node.second == 'M'){
 				for(int i = 0; i < females; i++){
-					graph[selected_node.second][i] = 0;
+					graph[selected_node.first][i] = 0;
 				}
 			}
 			else{
 				for(int i = 0; i < males; i++){
-					graph[i][selected_node.second] = 0;
+					graph[i][selected_node.first] = 0;
 				}
 			}
+			
 			eliminados++;
+			cout << eliminados << endl;
 		}
 		
-        cout << eliminados << endl;
+        cout << pupils - eliminados << endl;
         
     }
+    getchar();
     return 0;
 }
