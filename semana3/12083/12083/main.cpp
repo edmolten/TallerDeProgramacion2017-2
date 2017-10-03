@@ -165,7 +165,7 @@ int main(int argc, const char * argv[]) {
         
         print_graph(graph);
         // TODO hasta aca llegue
-		while(ford_fulkerson(graph, graph.size()-1, graph.size()-2) != 0){
+		while(ford_fulkerson(graph, graph.size()-2, graph.size()-1) != 0){
 			
 			int selected_node = check_node_max(&graph, males, females);
         
