@@ -2,6 +2,8 @@
 #include <vector>
 #include <queue>
 
+#define INT_MAX 500;
+
 using namespace std;
 typedef vector<vector<int> > graph;
 
@@ -10,6 +12,7 @@ struct info{
     string music;
     string sport;
 };
+
 typedef struct info info;
 typedef vector<info> infos;
 
@@ -128,7 +131,38 @@ void delete_useless(graph * g, int males, int females){
     }
 }
 
+pair<int, char> check_node_max(graph * g, int males, int females){
+	
+	int max_cardinalidad = 0;
+	int aux;
+    pair<int,char> nodo_max_cardinalidad;
 
+    for(int i = 0; i < males; i++){
+		for(int j = 0; j < females; j++){	
+			aux += (*g)[i][j];
+		}
+		if (aux > max_cardinalidad){
+			max_cardinalidad = aux;
+			nodo_max_cardinalidad.first = i;
+			nodo_max_cardinalidad.second = 'M';
+		};
+		aux = 0;
+	}
+		
+	for(int i = 0; i < females; i++){
+		for(int j = 0; j < males; j++){	
+			aux += (*g)[j][i];
+		}
+		if (aux > max_cardinalidad){ 
+			max_cardinalidad = aux;
+			nodo_max_cardinalidad.first = i;
+			nodo_max_cardinalidad.second = 'F';
+		}
+	}
+	
+	return nodo_max_cardinalidad;
+
+}
 
 
 int main(int argc, const char * argv[]) {
@@ -138,9 +172,13 @@ int main(int argc, const char * argv[]) {
     
     cin >> testCases;
     for(int i = 0 ; i < testCases; i++){
+        
         cin >> pupils;
+        
         int males = 0;
         int females = 0;
+        int eliminados = 0;
+        
         infos males_infos(pupils);
         infos females_infos(pupils);
         
@@ -166,7 +204,25 @@ int main(int argc, const char * argv[]) {
         }
 
         delete_useless(&graph, males, females);
-        cout << "costo"<< endl << ford_fulkerson(graph, graph.size()-1, graph.size()-2)<<endl;
+        //cout << "costo" << endl << ford_fulkerson(&graph, graph.size()-1, graph.size()-2) << endl;		
+		
+		if(ford_fulkerson(graph, graph.size()-1, graph.size()-2) != 0){
+			pair <int, char> selected_node = check_node_max(&graph, males, females);
+        
+			if(selected_node.second == 'M'){
+				for(int i = 0; i < females; i++){
+					graph[selected_node.second][i] = 0;
+				}
+			}
+			else{
+				for(int i = 0; i < males; i++){
+					graph[i][selected_node.second] = 0;
+				}
+			}
+			eliminados++;
+		}
+		
+        cout << eliminados << endl;
         
     }
     return 0;
