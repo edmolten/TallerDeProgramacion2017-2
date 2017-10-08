@@ -1,0 +1,3 @@
+/Users/cgallegu/GitHub/TallerDeProgramacion2017-2/semana4/160/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/cgallegu/GitHub/TallerDeProgramacion2017-2/semana4/160/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/cgallegu/GitHub/TallerDeProgramacion2017-2/semana4/160/cmake-build-debug/CMakeFiles/160.dir
