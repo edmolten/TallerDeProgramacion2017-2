@@ -33,6 +33,11 @@
 
 # Del CLion
 */.idea
-
+*/*/.idea
+*/*/*/.idea
+*/cmake-build-debug
+*/*/cmake-build-debug
+*/*/*/cmake-build-debug
+*/*/*/*/cmake-build-debug
 # El ejecutable
 */main
