@@ -1,7 +1,10 @@
 #include <iostream>
+#include <stdio.h>
+#include <string>
+
 using namespace std;
 
-int factorial(int n)
+double factorial(int n)
 {
     return (n == 1 || n == 0) ? 1 : factorial(n - 1) * n;
 }
@@ -9,10 +12,17 @@ int factorial(int n)
 
 int main() {
     int n;
-    cin >> n;
-    while(n){
-        cout << factorial(2*n)/(factorial(n+1)*factorial(n)) << endl;
-        cin >> n;
+    string z;
+    double a, b, c;
+    while(true){
+
+        cin >> z;
+        if(z=="\n") break;
+        n = stoi(z);
+        a= factorial(2*n);
+        b=factorial(n+1);
+        c= factorial(n);
+        cout << a/(b*c) << endl;
     }
     return 0;
 }
