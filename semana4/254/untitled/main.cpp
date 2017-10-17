@@ -5,18 +5,9 @@ using namespace std;
 
 typedef stack <int> pila;
 
-void showstack(pila gq){
-    pila g = gq;
-    while(!g.empty()){
-        cout << '\t' << g.top();
-        g.pop();
-    }
-    cout << endl;
-}
-
 int main() {
 
-    int n, steps, torre_actual, disk, torre_menor, torre_mayor, torre_menor_pos, torre_mayor_pos;
+    int n, steps, torre_actual, torre_objetivo, disk, torreA, torreB;
 
     pila torre[3];
 
@@ -27,40 +18,51 @@ int main() {
             torre[0].push(i);
         }
 
-        for(int j = 0; j < steps; j++){
-            if(j%2 == 0){
+        for (int j = 0; j < steps; j++) {
 
-                torre_actual = (j*2)%3;
+            if (j % 2 == 0) {
+
+                torre_actual = (j * 2) % 3;
+                torre_objetivo = (torre_actual + 1) % 3;
 
                 disk = torre[torre_actual].top();
                 torre[torre_actual].pop();
-                torre[(torre_actual + 1)%3].push(disk);
+                torre[torre_objetivo].push(disk);
             }
-            else{
-                torre_menor = n;
-                torre_mayor = 2;
-                for(int k = 0; k < 2; k++){
-                    if(torre[k].top() != 1){
-                        if(torre[k].top() < torre_menor){
-                            torre_menor = torre[k].top();
-                            torre_menor_pos = k;
-                        }
-                        if(torre[k].top() > torre_mayor){
-                            torre_mayor = torre[k].top();
-                            torre_mayor_pos = k;
-                        }
+
+            else {
+                torreA = (torre_objetivo + 1) % 3;
+                torreB = (torreA + 1) % 3;
+
+                if (torre[torreA].empty()) {
+                    disk = torre[torreB].top();
+                    torre[torreB].pop();
+                    torre[torreA].push(disk);
+                } else if (torre[torreB].empty()) {
+                    disk = torre[torreA].top();
+                    torre[torreA].pop();
+                    torre[torreB].push(disk);
+                } else {
+                    if (torre[torreA].top() > torre[torreB].top()) {
+                        disk = torre[torreB].top();
+                        torre[torreB].pop();
+                        torre[torreA].push(disk);
+                    } else {
+                        disk = torre[torreA].top();
+                        torre[torreA].pop();
+                        torre[torreB].push(disk);
                     }
                 }
-
-                torre[torre_menor_pos].pop();
-                torre[torre_mayor_pos].push(torre_mayor);
             }
         }
 
-        cout << torre[0].size() << torre[1].size() << torre[2].size() << endl;
+        cout << torre[0].size() << " " << torre[1].size() << " " << torre[2].size() << endl;
+
+        torre[0] = pila();
+        torre[1] = pila();
+        torre[2] = pila();
 
         cin >> n >> steps;
     }
-
     return 0;
 }

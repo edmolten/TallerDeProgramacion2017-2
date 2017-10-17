@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+
 char s[128] = {'\0'};
 int n, b[128] = {0}, lb = 0;
+
 void Transform(int len)
 {
     int a[128] = {0}, la = 0; lb = 0;
@@ -19,6 +21,7 @@ void Transform(int len)
         if (!a[len - 1]) len--;
     }
 }
+
 int main()
 {
     int tower1 = 0, tower2 = 0, tower3 = 0, tmp;
