@@ -1,15 +1,21 @@
 from math import factorial
 import sys
 
+first = 1
+
 while True:
-    x = input()
+    x = sys.stdin.readline().strip()
+    if first:
+        first = 0
+    else:
+        print()
     if not x:
         break
     n = int(x)
-    a= factorial(2*n)
+    a = factorial(2*n)
     b = factorial(n+1)
     c = factorial(n)
-    print(str(a//(b*c)))
-    print("")
-    #if x != "":
-    #    print()
+    print(a//(b*c))
+    #print()
+
+# PICO ESTA MIERDA
