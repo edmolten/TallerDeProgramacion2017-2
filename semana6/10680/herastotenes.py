@@ -35,5 +35,6 @@ def hera(n):
             primes.append(i)
     return primes
 
-p = hera(1000000)
+n = 1000
+p = hera(n)
 print(p)
