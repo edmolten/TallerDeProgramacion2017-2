@@ -1,20 +1,28 @@
 from collections import Counter
 
-def hera(n):
-    primes = []
-    composites = [False]*n
-    for i in range(2, n):
-        j = 2
-        while j * i < n:
-            composites[i * j] = True
-            j += 1
-    for i in range(2, n):
-        if not composites[i]:
-            primes.append(i)
-    return primes
+#def hera(n):
+#    primes = []
+#    composites = [False]*n
+#    for i in range(2, n):
+#        j = 2
+#        while j * i < n:
+#            composites[i * j] = True
+#            j += 1
+#    for i in range(2, n):
+#        if not composites[i]:
+#            primes.append(i)
+#    return primes
 
-primos = hera(1000000)
+def primes(n):
+    """ Returns  a list of primes < n """
+    sieve = [True] * n
+    for i in range(3,int(n**0.5)+1,2):
+        if sieve[i]:
+            sieve[i*i::2*i]=[False]*((n-i*i-1)//(2*i)+1)
+    return [2] + [i for i in range(3,n,2) if sieve[i]]
 
+primos = primes(1000000)
+    
 def binary_search(numero, arreglo):
     lo = 0
     up = len(arreglo) - 1
@@ -31,22 +39,31 @@ def binary_search(numero, arreglo):
 
     return lo
 
-T = input()
+#print(len(primos))
 
-for cases in range(int(T)):
+T = int(input())
+while T > 0:
     L, U = input().strip().split()
 
     lower = binary_search(int(L), primos)
     upper = binary_search(int(U), primos)
 
-    if upper - lower == 1:
-        if primos[upper] > int(U):
-            diffs = list()
-        else:
-            diffs = [primos[upper] - primos[lower]]
-    else:
-        diffs = [t - s for s,t in zip(primos[lower:upper],primos[lower+1:upper])]
+#    if upper - lower == 1:
+#        if primos[upper] > int(U):
+#            diffs = list()
+#        else:
+#            diffs = [primos[upper] - primos[lower]]
+#    else:
+
+    while primos[upper] > int(U):
+        upper -= 1
+
+    diffs = [t - s for s,t in zip(primos[lower:upper+1],primos[lower+1:upper+1])]
     count = Counter(diffs)
+
+    #print((lower, primos[lower]), (upper, primos[upper]))
+    #print((lower, primos[lower]), (upper, primos[upper]))
+
 
     if(len(count) > 0):
         max1 = count.most_common()[0][1]
@@ -63,5 +80,6 @@ for cases in range(int(T)):
     else:
         print("No jumping champion")
 
+    T = T - 1
+    
 print("")
-
