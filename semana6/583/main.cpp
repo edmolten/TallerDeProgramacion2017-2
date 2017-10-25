@@ -26,41 +26,50 @@ int main() {
             ++pos;
         }
     }
+    do {
+        cin >> n;
+        if (n < 0) {
+            cout << n << " = -1 x ";
+            n = n * -1;
+        } else {
+            cout << n << " = ";
+        }
+        int mayorPrime = 0;
 
-    cin >> n ;
-    int mayorPrime;
-    while(n!=0){
-        mayorPrime = 0;
-        for(int i=0; i< primes.size(); i++ ){
-            if(primes[i]<=n){
+        for (int i = 0; i < primes.size(); i++) {
+            if (primes[i] <= n) {
                 mayorPrime++;
+            } else break;
+
+        }
+
+        vector<int> result(mayorPrime);
+
+
+        for (int i = 0; i < primes.size(); i++) {
+            if (n % primes[i] == 0) {
+                n = n / primes[i];
+                result[i]++;
+                --i;
             }
-
+            if (n == 1)break;
         }
-        int result[mayorPrime];
+        int q = 0;
 
-        for(int j = 0; j < mayorPrime; j++){
-            int floor;
-            int a=1;
-            int k = 0;
-            do{
-                floor = n/pow(primes[j],a);
-                k += floor;
-                a++;
-            }while(floor != 0);
-            result[j]=k;
-        }
-        cout << n;
-        cout << "! = ";
-        for(int w=0; w<mayorPrime; w++){
-            cout << result[w];
-            if(w!=mayorPrime-1){
-                cout << " ";
+        for(int w = 0; w < result.size(); w++){
+            if(result[w]!=0){
+                for(int r=0; r<result[w];r++){
+                    if(q==0) {
+                        cout  << primes[w];
+                    }else cout << " x " << primes[w];
+                    q++;
+
+                }
             }
         }
         cout << endl;
-        cin >> n;
-    }
+
+    }while(n!=0);
 
 
     return 0;
