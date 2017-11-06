@@ -12,31 +12,28 @@ sum1 = [0]* (100005)
 g = [0]* (100005)
 par[0] = -1
 
-for i in range(2,M): #podria partir desde 1
-    while k>=0 and t[k + 1] != t[i]:
+for i in range(1, M):
+    while k >= 0 and t[k + 1] != t[i]:
         k = par[k]
     if t[k+1] == t[i]:
-        k+=1
+        k += 1
     par[i] = k
 k = -1
-
-for i in range(1,N): #podria partir de 0
+for i in range(0, N):
     if t[k+1] == s[i]:
-        k+=1
+        k += 1
     else:
-        while k>=0 and t[k+1] != s[i]:
+        while k >= 0 and t[k+1] != s[i]:
             k = par[k]
         if t[k+1] == s[i]:
-            k+=1
+            k += 1
     if k == M-1:
-        g[i]=1
-
+        g[i] = 1
 f[0] = 0
 sum1[0] = 0
 tot[0] = 0
 ans = 0
-
-for i in range(2,N+1): #podría ser desde 2
+for i in range(1, N+1): #podría ser desde 2
     if g[i-1]:
         f[i] = tot[i - M] + i - M + 1
         f[i] %= MOD
