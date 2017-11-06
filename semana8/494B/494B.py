@@ -8,6 +8,7 @@ k = -1
 par = [0]* (100005)
 f = [0]* (100005)
 tot = [0]* (100005)
+g = [0]* (100005)
 par[0] = -1
 
 for i in range(2,M): #podria partir desde 1
