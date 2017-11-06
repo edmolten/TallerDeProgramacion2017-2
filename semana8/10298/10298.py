@@ -30,9 +30,4 @@ while(word!="."):
                 print(len(word)//i)
                 break
 
-
-
-
-
-
     word = input()
