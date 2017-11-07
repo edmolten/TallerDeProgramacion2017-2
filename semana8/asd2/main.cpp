@@ -6,8 +6,8 @@ using namespace std;
 #define M 1000000007
 
 int main(){
-    // static for memory issues in windows
-    static int partition[L], j, st_len, pattern_len, i;
+    // static for memory issues in Windows
+    static int prefix_table[L], j, s_len, t_len, i;
     static long long DP[L], left_matches[L], sums[L], total[L], m, result;
     string s, t;
 
@@ -18,39 +18,44 @@ int main(){
     result = 0;
     j = -1;
     m = M;
-    partition[0] = -1;
-    st_len = s.size();
-    pattern_len = t.size();
+    prefix_table[0] = -1;
+    s_len = s.size();
+    t_len = t.size();
 
-    for(i=1; i<pattern_len; i++){
+    // Build KMP prefix table ---------------------------
+    for(i=1; i<t_len; i++){
         while(j>=0 && t[j+1] != t[i]) {
-            j = partition[j];
+            j = prefix_table[j];
         }
         if(t[j+1] == t[i]){
             j++;
         }
-        partition[i] = j;
+        prefix_table[i] = j;
     }
+
+    // Run KMP ------------------------------------------
     j = -1;
-    for(i=0; i<st_len; i++){
+    for(i=0; i<s_len; i++){
         if(t[j+1] == s[i]){
             j++;
         }
         else {
             while (j >= 0 && t[j + 1] != s[i]){
-                j = partition[j];
+                j = prefix_table[j];
             }
             if(t[j+1] == s[i]){
                 j++;
             }
         }
-        if(j == pattern_len-1) {
+        if(j == t_len-1) {
             left_matches[i] = 1;
         }
     }
-    for(i=1; i<=st_len; i++){
-        if(left_matches[i-1]){
-            DP[i] = total[i-pattern_len] + i-pattern_len+1;
+
+    // Run DP ----------------------------------------------
+    for(i=1; i<=s_len; i++){
+        if(left_matches[i-1]){ // if the pattern matches from that position backward
+            DP[i] = total[i-t_len] + i-t_len+1;
             DP[i] %= m;
             sums[i] = DP[i] + sums[i-1];
             sums[i] %= m;
