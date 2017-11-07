@@ -6,16 +6,24 @@ using namespace std;
 #define M 1000000007
 
 int main(){
-    int partition[L], j, st_len, pattern_len;;
-    long long DP[L], left_matches[L], sums[L], total[L], m;
+    int partition[L];
+    int j, st_len, pattern_len, i;
+    long long DP[L], left_matches[L], sums[L], total[L];
+    long long m, result;
     string s, t;
+
+    cin >> s >> t;
+    DP[0] = 0;
+    sums[0] = 0;
+    total[0] = 0;
+    result = 0;
     j = -1;
     m = M;
     partition[0] = -1;
-    cin >> s >> t;
     st_len = s.size();
     pattern_len = t.size();
-    for(int i=1; i<pattern_len; i++){
+
+    for(i=1; i<pattern_len; i++){
         while(j>=0 && t[j+1] != t[i]) {
             j = partition[j];
         }
@@ -25,7 +33,7 @@ int main(){
         partition[i] = j;
     }
     j = -1;
-    for(int i=0; i<st_len; i++){
+    for(i=0; i<st_len; i++){
         if(t[j+1] == s[i]){
             j++;
         }
@@ -41,9 +49,7 @@ int main(){
             left_matches[i] = 1;
         }
     }
-    DP[0] = sums[0] = total[0] = 0;
-    long long ans = 0;
-    for(int i=1;i<=st_len;++i){
+    for(i=1; i<=st_len; i++){
         if(left_matches[i-1]){
             DP[i] = total[i-pattern_len] + i-pattern_len+1;
             DP[i] %= m;
@@ -56,9 +62,9 @@ int main(){
         }
         total[i] = sums[i] + total[i-1];
         total[i] %= m;
-        ans += DP[i];
-        ans %= m;
+        result += DP[i];
+        result %= m;
     }
-    cout << ans << endl;
+    cout << result << endl;
     return 0;
 }
