@@ -6,10 +6,9 @@ using namespace std;
 #define M 1000000007
 
 int main(){
-    int partition[L];
-    int j, st_len, pattern_len, i;
-    long long DP[L], left_matches[L], sums[L], total[L];
-    long long m, result;
+    // static for memory issues in windows
+    static int partition[L], j, st_len, pattern_len, i;
+    static long long DP[L], left_matches[L], sums[L], total[L], m, result;
     string s, t;
 
     cin >> s >> t;
