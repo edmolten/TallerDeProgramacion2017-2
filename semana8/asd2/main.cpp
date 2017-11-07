@@ -1,56 +1,63 @@
 #include <iostream>
-#include <cstdio>
-#include <algorithm>
-#include <string>
+
 using namespace std;
 
-long long MOD = (long long) 1e9 + 7LL;
+#define L 10//0000
+#define M 1000000007
 
-
-string s, t;
-int par[100005];
-long long f[100005], g[100005], sum[100005], tot[100005];
-
-int N, M;
 int main(){
+    int partition[L], j, st_len, pattern_len;;
+    long long DP[L], left_matches[L], sums[L], total[L], m;
+    string s, t;
+    j = -1;
+    m = M;
+    partition[0] = -1;
     cin >> s >> t;
-    N = s.size();
-    M = t.size();
-    int k = -1;
-    par[0] = -1;
-    for(int i=1;i<M;++i){
-        while(k>=0 && t[k+1] != t[i]) k = par[k];
-        if(t[k+1] == t[i]) ++k;
-        par[i] = k;
+    st_len = s.size();
+    pattern_len = t.size();
+    for(int i=1; i<pattern_len; i++){
+        while(j>=0 && t[j+1] != t[i]) {
+            j = partition[j];
+        }
+        if(t[j+1] == t[i]){
+            j++;
+        }
+        partition[i] = j;
     }
-    k = -1;
-    for(int i=0;i<N;++i){
-        if(t[k+1] == s[i]) ++k;
+    j = -1;
+    for(int i=0; i<st_len; i++){
+        if(t[j+1] == s[i]){
+            j++;
+        }
         else {
-            while(k>=0 && t[k+1] != s[i]) k = par[k];
-            if(t[k+1] == s[i]) ++k;
+            while (j >= 0 && t[j + 1] != s[i]){
+                j = partition[j];
+            }
+            if(t[j+1] == s[i]){
+                j++;
+            }
         }
-        if(k == M-1) {
-            g[i] = 1;
+        if(j == pattern_len-1) {
+            left_matches[i] = 1;
         }
     }
-    f[0] = sum[0] = tot[0] = 0;
+    DP[0] = sums[0] = total[0] = 0;
     long long ans = 0;
-    for(int i=1;i<=N;++i){
-        if(g[i-1]){
-            f[i] = tot[i-M] + i-M+1;
-            f[i] %= MOD;
-            sum[i] = f[i] + sum[i-1];
-            sum[i] %= MOD;
+    for(int i=1;i<=st_len;++i){
+        if(left_matches[i-1]){
+            DP[i] = total[i-pattern_len] + i-pattern_len+1;
+            DP[i] %= m;
+            sums[i] = DP[i] + sums[i-1];
+            sums[i] %= m;
         } else {
-            f[i] = f[i-1];
-            sum[i] = f[i] + sum[i-1];
-            sum[i] %= MOD;
+            DP[i] = DP[i-1];
+            sums[i] = DP[i] + sums[i-1];
+            sums[i] %= m;
         }
-        tot[i] = sum[i] + tot[i-1];
-        tot[i] %= MOD;
-        ans += f[i];
-        ans %= MOD;
+        total[i] = sums[i] + total[i-1];
+        total[i] %= m;
+        ans += DP[i];
+        ans %= m;
     }
     cout << ans << endl;
     return 0;
