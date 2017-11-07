@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#define L 10//0000
+#define L 100000
 #define M 1000000007
 
 int main(){
