@@ -1,8 +1,8 @@
 // A C program to implement Ukkonen's Suffix Tree Construction
 // And then find Longest Repeated Substring
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #define MAX_CHAR 256
 
 struct SuffixTreeNode {
@@ -29,17 +29,17 @@ struct SuffixTreeNode {
 typedef struct SuffixTreeNode Node;
 
 char text[100]; //Input string
-Node *root = NULL; //Pointer to root node
+Node *root = nullptr; //Pointer to root node
 
 /*lastNewNode will point to newly created internal node,
   waiting for it's suffix link to be set, which might get
   a new suffix link (other than root) in next extension of
-  same phase. lastNewNode will be set to NULL when last
+  same phase. lastNewNode will be set to nullptr when last
   newly created internal node (if there is any) got it's
   suffix link reset to new internal node created in next
   extension of same phase. */
-Node *lastNewNode = NULL;
-Node *activeNode = NULL;
+Node *lastNewNode = nullptr;
+Node *activeNode = nullptr;
 
 /*activeEdge is represeted as input string character
   index (not the character itself)*/
@@ -50,8 +50,8 @@ int activeLength = 0;
 // be added in tree
 int remainingSuffixCount = 0;
 int leafEnd = -1;
-int *rootEnd = NULL;
-int *splitEnd = NULL;
+int *rootEnd = nullptr;
+int *splitEnd = nullptr;
 int size = -1; //Length of input string
 
 Node *newNode(int start, int *end)
@@ -59,9 +59,9 @@ Node *newNode(int start, int *end)
     Node *node =(Node*) malloc(sizeof(Node));
     int i;
     for (i = 0; i < MAX_CHAR; i++)
-        node->children[i] = NULL;
+        node->children[i] = nullptr;
 
-    /*For root node, suffixLink will be set to NULL
+    /*For root node, suffixLink will be set to nullptr
     For internal nodes, suffixLink will be set to root
     by default in  current extension and may change in
     next extension*/
@@ -110,10 +110,10 @@ void extendSuffixTree(int pos)
     added in tree*/
     remainingSuffixCount++;
 
-    /*set lastNewNode to NULL while starting a new phase,
+    /*set lastNewNode to nullptr while starting a new phase,
      indicating there is no internal node waiting for
      it's suffix link reset in current phase*/
-    lastNewNode = NULL;
+    lastNewNode = nullptr;
 
     //Add all suffixes (yet to be added) one by one in tree
     while(remainingSuffixCount > 0) {
@@ -123,7 +123,7 @@ void extendSuffixTree(int pos)
 
         // There is no outgoing edge starting with
         // activeEdge from activeNode
-        if (activeNode->children[text[activeEdge]] == NULL)
+        if (activeNode->children[text[activeEdge]] == nullptr)
         {
             //Extension Rule 2 (A new leaf edge gets created)
             activeNode->children[text[activeEdge]] =
@@ -134,12 +134,12 @@ void extendSuffixTree(int pos)
              if there is any internal node waiting for it's suffix
              link get reset, point the suffix link from that last
              internal node to current activeNode. Then set lastNewNode
-             to NULL indicating no more node waiting for suffix link
+             to nullptr indicating no more node waiting for suffix link
              reset.*/
-            if (lastNewNode != NULL)
+            if (lastNewNode != nullptr)
             {
                 lastNewNode->suffixLink = activeNode;
-                lastNewNode = NULL;
+                lastNewNode = nullptr;
             }
         }
             // There is an outgoing edge starting with activeEdge
@@ -161,10 +161,10 @@ void extendSuffixTree(int pos)
                 //If a newly created node waiting for it's
                 //suffix link to be set, then set suffix link
                 //of that waiting node to curent active node
-                if(lastNewNode != NULL && activeNode != root)
+                if(lastNewNode != nullptr && activeNode != root)
                 {
                     lastNewNode->suffixLink = activeNode;
-                    lastNewNode = NULL;
+                    lastNewNode = nullptr;
                 }
 
                 //APCFER3
@@ -197,7 +197,7 @@ void extendSuffixTree(int pos)
               internal node created in last extensions of same
               phase which is still waiting for it's suffix link
               reset, do it now.*/
-            if (lastNewNode != NULL)
+            if (lastNewNode != nullptr)
             {
                 /*suffixLink of lastNewNode points to current newly
                   created internal node*/
@@ -230,19 +230,12 @@ void extendSuffixTree(int pos)
     }
 }
 
-void print(int i, int j)
-{
-    int k;
-    for (k=i; k<=j; k++)
-        printf("%c", text[k]);
-}
-
 //Print the suffix tree as well along with setting suffix index
 //So tree will be printed in DFS manner
 //Each edge along with it's suffix index will be printed
 void setSuffixIndexByDFS(Node *n, int labelHeight)
 {
-    if (n == NULL)  return;
+    if (n == nullptr)  return;
 
     if (n->start != -1) //A non-root node
     {
@@ -254,7 +247,7 @@ void setSuffixIndexByDFS(Node *n, int labelHeight)
     int i;
     for (i = 0; i < MAX_CHAR; i++)
     {
-        if (n->children[i] != NULL)
+        if (n->children[i] != nullptr)
         {
             //Uncomment below two lines to print suffix index
             // if (leaf == 1 && n->start != -1)
@@ -277,12 +270,12 @@ void setSuffixIndexByDFS(Node *n, int labelHeight)
 
 void freeSuffixTreeByPostOrder(Node *n)
 {
-    if (n == NULL)
+    if (n == nullptr)
         return;
     int i;
     for (i = 0; i < MAX_CHAR; i++)
     {
-        if (n->children[i] != NULL)
+        if (n->children[i] != nullptr)
         {
             freeSuffixTreeByPostOrder(n->children[i]);
         }
@@ -316,7 +309,7 @@ void buildSuffixTree()
 int get_number_of_children(Node * n){
     int r = 0;
     for(int i = 0; i < MAX_CHAR; i++){
-        if(n->children[i] != NULL){
+        if(n->children[i] != nullptr){
             r ++;
         } else{
             break;
@@ -326,9 +319,9 @@ int get_number_of_children(Node * n){
 }
 
 void doTraversal(Node *n, int labelHeight, int* maxHeight,
-                 int* substringStartIndex, int* number)
+                 int* substringStartIndex, int* number, Node * parent)
 {
-    if(n == NULL)
+    if(n == nullptr)
     {
         return;
     }
@@ -337,11 +330,11 @@ void doTraversal(Node *n, int labelHeight, int* maxHeight,
     {
         for (i = 0; i < MAX_CHAR; i++)
         {
-            if(n->children[i] != NULL)
+            if(n->children[i] != nullptr)
             {
                 doTraversal(n->children[i], labelHeight +
                                             edgeLength(n->children[i]), maxHeight,
-                            substringStartIndex, number);
+                            substringStartIndex, number, n);
             }
         }
     }
@@ -350,7 +343,7 @@ void doTraversal(Node *n, int labelHeight, int* maxHeight,
     {
         *maxHeight = labelHeight - edgeLength(n);
         *substringStartIndex = n->suffixIndex;
-        *number = get_number_of_children(n);
+        *number = get_number_of_children(parent);
     }
 }
 
@@ -361,7 +354,7 @@ void getLongestRepeatedSubstring()
     int maxHeight = 0;
     int substringStartIndex = 0;
     int number = 0;
-    doTraversal(root, 0, &maxHeight, &substringStartIndex, &number);
+    doTraversal(root, 0, &maxHeight, &substringStartIndex, &number, nullptr);
   printf("maxHeight %d, substringStartIndex %d\n", maxHeight,
            substringStartIndex);
     printf("Longest Repeated Substring in %s is: ", text);
@@ -383,7 +376,6 @@ int main(int argc, char *argv[])
     getLongestRepeatedSubstring();
     //Free the dynamically allocated memory
     freeSuffixTreeByPostOrder(root);
-
 
     return 0;
 }
