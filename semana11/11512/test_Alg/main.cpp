@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <iostream>
+using namespace std;
 #define MAX_CHAR 256
 
 struct SuffixTreeNode {
@@ -378,12 +380,15 @@ void getLongestRepeatedSubstring()
 // driver program to test above functions
 int main(int argc, char *argv[])
 {
-    strcpy(text, "GATTACA$");
+    int reps;
+    cin >> reps;
+    for(int i; i<reps;i++){
+    cin >>text;
     buildSuffixTree();
     getLongestRepeatedSubstring();
     //Free the dynamically allocated memory
     freeSuffixTreeByPostOrder(root);
-
+    }
 
     return 0;
 }
