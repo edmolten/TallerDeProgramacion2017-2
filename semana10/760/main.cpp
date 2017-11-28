@@ -154,7 +154,7 @@ void buildSuffixTree()
 {
     size = strlen(text);
     int i;
-    rootEnd = (int*) malloc(sizeof(int));
+    rootEnd = (int*)  malloc(sizeof(int));
     *rootEnd = - 1;
     root = newNode(-1, rootEnd);
     activeNode = root;
@@ -233,7 +233,6 @@ void getLongestCommonSubstring() {
     }
     cout << endl;
 }
-
 int main(int argc, char *argv[]){
     string a, b;
     string sep;
@@ -256,6 +255,7 @@ int main(int argc, char *argv[]){
         buildSuffixTree();
         getLongestCommonSubstring();
         freeSuffixTreeByPostOrder(root);
+
     }
     return 0;
 }

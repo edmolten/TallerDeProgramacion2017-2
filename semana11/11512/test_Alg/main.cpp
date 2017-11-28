@@ -265,5 +265,6 @@ int main(int argc, char *argv[]){
         getLongestRepeatedSubstring();
         freeSuffixTreeByPostOrder(root);
     }
+
     return 0;
 }
