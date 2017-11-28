@@ -1,12 +1,13 @@
 package cly;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
 
-    class ch7_01_points_lines {
-        final double INF = 1e9;
-        final double EPS = 1e-9;
+
+        static final double INF = 1e9;
+        static final double EPS = 1e-9;
         // we will use constant Math.PI in Java
 
         double DEG_to_RAD(double d) { return d * Math.PI / 180.0; }
@@ -14,11 +15,8 @@ public class Main {
         double RAD_to_DEG(double r) { return r * 180.0 / Math.PI; }
 
         //struct point_i { int x, y; };        // basic raw form, minimalist mode
-        class point_i { int x, y;         // whenever possible, work with point_i
-            point_i() { x = y = 0; }                         // default constructor
-            point_i(int _x, int _y) { x = _x; y = _y; } };          // user-defined
 
-        class point implements Comparable<point>{
+        static class point implements Comparable<point>{
             double x, y;                   // only used if more precision is needed
             point() { x = y = 0.0; }                         // default constructor
             point(double _x, double _y) { x = _x; y = _y; }         // user-defined
@@ -31,7 +29,7 @@ public class Main {
                 else
                     return 0; } };                                    // they are equal
 
-        double dist(point p1, point p2) {                   // Euclidean distance
+        static double dist(point p1, point p2) {                   // Euclidean distance
             // Math.hypot(dx, dy) returns sqrt(dx * dx + dy * dy)
             return Math.hypot(p1.x - p2.x, p1.y - p2.y); }         // return double
 
@@ -294,9 +292,33 @@ public class Main {
             System.out.printf("G = (%.2f, %.2f)\n", G.x, G.y);
         }
 
-    }
-
     public static void main(String[] args) {
-	// write your code here
+        Scanner reader = new Scanner(System.in);
+        String input = reader.nextLine();
+        String[] nk = input.split(" ");
+        String[] xy;
+        int n = Integer.valueOf(nk[0]);
+        int k = Integer.valueOf(nk[1]);
+        int x, y;
+        double distance = 0;
+        point p = null;
+        for(int i = 0; i< n; i++){
+            input = reader.nextLine();
+            xy = input.split(" ");
+            x = Integer.valueOf(xy[0]);
+            y = Integer.valueOf(xy[1]);
+            if(i ==0){
+                p = new point(x,y);
+            }
+            else{
+                point p2 = p;
+                p = new point(x,y);
+                distance += dist(p2,p);
+            }
+
+
+        }
+        distance = (distance/50) * k;
+        System.out.println(distance);
     }
 }
