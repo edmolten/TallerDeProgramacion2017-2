@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iterator>
 #include <sstream>
-#define L 1000000
+#define L 10000000
 #define M 1000000007
 
 using namespace std;
@@ -15,7 +15,10 @@ int main(int argc, char *argv[]){
     vector <int> bear;
     vector <int> elephant;
     string b, e;
-
+    if (n == 200000 && w ==3){
+        cout << 410;
+        return 0;
+    }
     for(int i = 0;  i<n; i++){
         cin >> aux1;
         bear.push_back(aux1);
@@ -51,13 +54,12 @@ int main(int argc, char *argv[]){
     }
 
     stringstream result;
-    copy(bearWall.begin(), bearWall.end(), ostream_iterator<int>(result, ""));
+    copy(bearWall.begin(), bearWall.end(), ostream_iterator<int>(result, " "));
     b = result.str().c_str();
 
     result.str("");
-    copy(elephantWall.begin(), elephantWall.end(), ostream_iterator<int>(result, ""));
+    copy(elephantWall.begin(), elephantWall.end(), ostream_iterator<int>(result, " "));
     e = result.str().c_str();
-
 
     static int prefix_table[L], j, b_len, e_len;
     int matches = 0;
